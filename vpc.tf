@@ -10,7 +10,9 @@ resource "aws_vpc" "my_vpc" {
 	} 
 }
 
-resource "aws_default_route_table" "my_vpc" {
+// default resource
+
+resource "aws_default_route_table" "my_vpc_default_route_table" {
 	default_route_table_id = aws_vpc.my_vpc.default_route_table_id
 	tags = {
 		Name = "default"
@@ -64,3 +66,20 @@ resource "aws_default_network_acl" "my_vpc_default_network_acl" {
 		Name = "default"
 	}
 }
+
+// internet access
+
+resource "aws_internet_gateway" "my_vpc_igw" {
+	vpc_id = aws_vpc.my_vpc.id
+	
+	tags = {
+		Name = "my_vpc_igw"
+	}
+}
+
+resource "aws_route" "my_vpc_internet_access" {
+	route_table_id = aws_vpc.my_vpc.main_route_table_id // == default_route_table_id
+	destination_cidr_block = "0.0.0.0/0"
+	gateway_id = aws_internet_gateway.my_vpc_igw.id
+}
+
