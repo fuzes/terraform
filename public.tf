@@ -70,3 +70,19 @@ resource "aws_route_table_association" "public_subnet2_association" {
 	subnet_id = aws_subnet.my_vpc_public_subnet2.id
 	route_table_id = aws_vpc.my_vpc.main_route_table_id
 }
+
+// create nat gateway
+
+resource "aws_eip" "my_vpc_nat_eip" {
+	vpc = true
+	depends_on = [aws_internet_gateway.my_vpc_igw]
+}
+
+resource "aws_nat_gateway" "my_vpc_nat" {
+	allocation_id = aws_eip.my_vpc_nat_eip.id
+	subnet_id = aws_subnet.my_vpc_public_subnet1.id
+	depends_on = [aws_internet_gateway.my_vpc_igw]
+	tags = {
+		Name = "my_vpc_nat"
+	}
+}
