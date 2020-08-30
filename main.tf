@@ -15,6 +15,21 @@ variable "aws_region"{
 	description="aws region"
 }
 
+variable "database_name" {
+	type=string
+	description="database name"
+}
+
+variable "database_user" {
+	type=string
+	description="database username"
+}
+
+variable "database_password" {
+	type=string
+	description="database password"
+}
+
 provider "aws" {
 	access_key = var.aws_access_key
 	secret_key = var.aws_secret_key
