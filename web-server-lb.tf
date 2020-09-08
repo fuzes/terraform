@@ -10,8 +10,8 @@ resource "aws_security_group" "frontend_lb_security" {
 	}
 
 	ingress {
-		from_port = 433
-		to_port = 433
+		from_port = 443 
+		to_port = 443 
 		protocol = "tcp"
 		cidr_blocks = ["0.0.0.0/0"]
 	}
@@ -29,7 +29,7 @@ resource "aws_lb" "frontend_lb" {
 	internal = false
 	load_balancer_type = "application"
 	security_groups = [aws_security_group.frontend_lb_security.id]
-	subnets = [aws_subnet.my_vpc_private_subnet1.id, aws_subnet.my_vpc_private_subnet2.id]
+	subnets = [aws_subnet.my_vpc_public_subnet1.id, aws_subnet.my_vpc_public_subnet2.id]
 }
 
 resource "aws_lb_target_group" "frontend_group" {
@@ -40,7 +40,7 @@ resource "aws_lb_target_group" "frontend_group" {
 }
 
 resource "aws_acm_certificate" "frontend_cert" {
-	domain_name = "fuzes.io"
+	domain_name = "*.fuzes.io"
 	validation_method = "DNS"
 }
 
